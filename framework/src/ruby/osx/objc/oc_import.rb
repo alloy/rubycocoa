@@ -265,7 +265,10 @@ module OSX
   def ns_import_all
     OSX.objc_classnames do |klassname|
       # ignore private classes, such as starting with "_".
-      if /\A[A-Z]/ =~ klassname
+      #
+      # PATCH CocoaPods.app also needs Swift classes ignored.
+      # See https://github.com/rubycocoa/rubycocoa/issues/8
+      if /\A[A-Z]/ =~ klassname && !klassname.include?('.')
         if OSX.const_defined?(klassname)
 	  next
 	end
